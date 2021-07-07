@@ -28,19 +28,20 @@ class ProductController(private val productService: ProductService) {
     @Put(value = "/{id}")
     fun updateProduct(@PathVariable id: String, @Body product: Product): HttpResponse<Product> {
         val convertedId = UUID.fromString(id)
-        val updatedProduct = Product(convertedId, product.name, product.price, product.type,product.description)
+        val updatedProduct = Product(convertedId, product.name, product.price, product.type, product.description)
         return HttpResponse.ok<Product?>().body(productService.updateProduct(convertedId, updatedProduct))
     }
 
     @Delete(value = "/{id}")
-    fun deleteProduct(@PathVariable id: String):HttpResponse<Unit> {
+    fun deleteProduct(@PathVariable id: String): HttpResponse<Unit> {
         val convertedId = UUID.fromString(id)
         productService.deleteProduct(convertedId)
         return HttpResponse.noContent()
 
     }
-    @Get (value = "/{id}")
-    fun getById(id: UUID): HttpResponse<Product?>{
+
+    @Get(value = "/{id}")
+    fun getById(id: UUID): HttpResponse<Product?> {
         return HttpResponse.ok(this.productService.getById(id))
     }
 }

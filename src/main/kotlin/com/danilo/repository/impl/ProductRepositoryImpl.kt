@@ -23,7 +23,6 @@ class ProductRepositoryImpl(private val cqlSession: CqlSession) : ProductReposit
                 )
         )
         return product
-
     }
 
 
@@ -52,26 +51,26 @@ class ProductRepositoryImpl(private val cqlSession: CqlSession) : ProductReposit
     override fun updateCql(id: UUID, product: Product): Product {
         cqlSession.execute(
             SimpleStatement
-                        .newInstance(
-                            "UPDATE product.Product SET name = ?, price = ?, type = ?,description = ? WHERE id = ?",
-                            product.name,
-                            product.price,
-                            product.type,
-                            product.description,
-                            id
-                        )
-                    )
+                .newInstance(
+                    "UPDATE product.Product SET name = ?, price = ?, type = ?,description = ? WHERE id = ?",
+                    product.name,
+                    product.price,
+                    product.type,
+                    product.description,
+                    id
+                )
+        )
         return product
     }
 
     override fun deleteCql(id: UUID) {
         cqlSession.execute(
-                    SimpleStatement
-                        .newInstance(
-                            "DELETE FROM product.Product WHERE id = ?",
-                            id
-                        )
-                    )
+            SimpleStatement
+                .newInstance(
+                    "DELETE FROM product.Product WHERE id = ?",
+                    id
+                )
+        )
     }
 
     override fun getByIdCql(id: UUID): Product? {
@@ -89,8 +88,8 @@ class ProductRepositoryImpl(private val cqlSession: CqlSession) : ProductReposit
                     product.getBigDecimal("price")!!,
                     product.getString("description")!!,
                     product.getString("type")!!
-            )
-        }.firstOrNull()
+                )
+            }.firstOrNull()
     }
 }
 
