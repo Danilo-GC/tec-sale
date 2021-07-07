@@ -51,8 +51,7 @@ class ProductRepositoryImpl(private val cqlSession: CqlSession) : ProductReposit
 
     override fun updateCql(id: UUID, product: Product): Product {
         cqlSession.execute(
-            (
-                    SimpleStatement
+            SimpleStatement
                         .newInstance(
                             "UPDATE product.Product SET name = ?, price = ?, type = ?,description = ? WHERE id = ?",
                             product.name,
@@ -62,31 +61,39 @@ class ProductRepositoryImpl(private val cqlSession: CqlSession) : ProductReposit
                             id
                         )
                     )
-        )
         return product
     }
 
     override fun deleteCql(id: UUID) {
         cqlSession.execute(
-            (
                     SimpleStatement
                         .newInstance(
                             "DELETE FROM product.Product WHERE id = ?",
                             id
                         )
                     )
-        )
-
     }
 
     override fun getByIdCql(id: UUID): Product? {
-       cqlSession.execute(
+        val selectResult = cqlSession.execute(
             SimpleStatement
                 .newInstance(
                     "SELECT * FROM product.Product WHERE id = ?",
                     id
                 )
         )
-        return Product(id)
-        }
+        return selectResult
+            .map { product ->
+                Product(
+                    product.getUuid("id")!!, product.getString("name")!!,
+                    product.getBigDecimal("price")!!,
+                    product.getString("description")!!,
+                    product.getString("type")!!
+            )
+        }.firstOrNull()
     }
+}
+
+
+
+
