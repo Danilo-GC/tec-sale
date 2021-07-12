@@ -12,7 +12,7 @@ import io.micronaut.http.annotation.Delete
 import io.micronaut.http.annotation.Post
 import java.util.UUID
 
-@Controller(value = "/products")
+@Controller(value = "/product")
 class ProductController(private val productService: ProductService) {
 
     @Get
